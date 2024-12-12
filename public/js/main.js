@@ -293,9 +293,12 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Đợi ảnh load xong để lấy kích thước chính xác
         imagePreview.addEventListener('load', () => {
-            // Tính toán kích thước ban đầu (30% kích thước ảnh)
-            const width = Math.round(imagePreview.offsetWidth * 0.3);
-            const height = Math.round(imagePreview.offsetHeight * 0.3);
+            // Tính toán kích thước dựa trên giá trị input
+            const scaleX = imagePreview.offsetWidth / originalWidth;
+            const scaleY = imagePreview.offsetHeight / originalHeight;
+            
+            const width = Math.round(parseInt(newWidth.value) * scaleX);
+            const height = Math.round(parseInt(newHeight.value) * scaleY);
             
             // Tính toán vị trí giữa ảnh
             const left = Math.round((imagePreview.offsetWidth - width) / 2);
@@ -305,6 +308,11 @@ document.addEventListener('DOMContentLoaded', function() {
             cropArea.style.height = height + 'px';
             cropArea.style.left = left + 'px';
             cropArea.style.top = top + 'px';
+            
+            // Cập nhật tỷ lệ khung nếu cần
+            if (keepAspectRatio.checked) {
+                aspectRatio = width / height;
+            }
         }, { once: true });
     }
 
