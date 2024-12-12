@@ -39,29 +39,45 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="row mb-3">
-                                <div class="col-lg-7">
+                                <div class="col-lg-4">
                                     <h5 class="card-title">Xem trước ảnh</h5>
                                     <p id="originalSize" class="mb-2"></p>
                                 </div>
-                                <div class="col-lg-5">
-                                    <div class="d-flex align-items-center gap-2">
-                                        <div class="form-group flex-grow-1">
-                                            <label class="small">Rộng (px):</label>
-                                            <input type="number" id="newWidth" class="form-control form-control-sm">
-                                        </div>
-                                        <div class="form-group flex-grow-1">
-                                            <label class="small">Cao (px):</label>
-                                            <input type="number" id="newHeight" class="form-control form-control-sm">
-                                        </div>
-                                    </div>
-                                    <div class="d-flex align-items-center justify-content-between mt-2">
-                                        <div class="form-check">
-                                            <input type="checkbox" class="form-check-input" id="keepAspectRatio" checked>
-                                            <label class="form-check-label small">Giữ tỷ lệ</label>
-                                        </div>
-                                        <div>
-                                            <button id="resizeBtn" class="btn btn-primary btn-sm">Drop hình ảnh</button>
-                                            <button id="downloadBtn" class="btn btn-success btn-sm ms-1">Tải xuống</button>
+                                <div class="col-lg-5 d-flex align-items-center">
+                                    <div class="resize-controls">
+                                        <div class="resize-controls-row">
+                                            <div class="input-group">
+                                                <span class="input-group-text">
+                                                    <i class="fas fa-arrows-alt-h"></i>
+                                                </span>
+                                                <input type="number" id="newWidth" class="form-control" placeholder="Chiều rộng">
+                                                <span class="input-group-text">px</span>
+                                            </div>
+                                            <div class="input-group">
+                                                <span class="input-group-text">
+                                                    <i class="fas fa-arrows-alt-v"></i>
+                                                </span>
+                                                <input type="number" id="newHeight" class="form-control" placeholder="Chiều cao">
+                                                <span class="input-group-text">px</span>
+                                            </div>
+                                            <label class="aspect-ratio-toggle">
+                                                <input type="checkbox" id="keepAspectRatio" checked>
+                                                <span class="toggle-track">
+                                                    <span class="toggle-indicator"></span>
+                                                </span>
+                                                <span class="toggle-label">
+                                                    <i class="fas fa-link"></i>
+                                                </span>
+                                            </label>
+                                            <div class="action-buttons">
+                                                <button id="resizeBtn" class="btn btn-primary">
+                                                    <i class="fas fa-check me-1"></i>
+                                                    OK
+                                                </button>
+                                                <button id="downloadBtn" class="btn btn-success">
+                                                    <i class="fas fa-download"></i>
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
