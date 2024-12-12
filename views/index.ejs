@@ -3,68 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ứng dụng Xử lý Ảnh</title>
+    <title>Image Crop & Resize Tool</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-    <div class="container-fluid p-3">
-        <h1 class="text-center mb-4">Ứng dụng Xử lý Ảnh</h1>
-        
-        <div class="row justify-content-center">
-            <div class="col-12">
-                <div class="drop-zone" id="dropZone">
-                    <div class="drop-zone-content">
-                        <i class="fas fa-cloud-upload-alt fa-3x mb-3"></i>
-                        <p>Kéo thả tệp của bạn vào đây hoặc nhấn để chọn file</p>
-                        <input type="file" id="fileInput" accept=".jpg,.jpeg,.png" class="d-none">
-                    </div>
-                </div>
-
-                <div id="previewSection" class="mt-4 d-none">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="row mb-3">
-                                <div class="col-lg-7">
-                                    <h5 class="card-title">Xem trước ảnh</h5>
-                                    <p id="originalSize" class="mb-2"></p>
+    <div class="app-wrapper">
+        <nav class="app-header">
+            <div class="logo">
+                <i class="fas fa-crop-alt"></i>
+                <span>ImageCraft</span>
+            </div>
+        </nav>
+        <main class="app-main">
+            <div class="container-fluid app-container">
+                <h1 class="text-center app-title">
+                    <i class="fas fa-crop-alt text-primary me-2"></i>
+                    Image Crop & Resize Tool
+                </h1>
+                
+                <div class="row justify-content-center">
+                    <div class="col-12">
+                        <div class="drop-zone" id="dropZone">
+                            <div class="drop-zone-content">
+                                <div class="upload-icon">
+                                    <i class="fas fa-cloud-upload-alt"></i>
                                 </div>
-                                <div class="col-lg-5">
-                                    <div class="d-flex align-items-center gap-2">
-                                        <div class="form-group flex-grow-1">
-                                            <label class="small">Rộng (px):</label>
-                                            <input type="number" id="newWidth" class="form-control form-control-sm">
-                                        </div>
-                                        <div class="form-group flex-grow-1">
-                                            <label class="small">Cao (px):</label>
-                                            <input type="number" id="newHeight" class="form-control form-control-sm">
-                                        </div>
-                                    </div>
-                                    <div class="d-flex align-items-center justify-content-between mt-2">
-                                        <div class="form-check">
-                                            <input type="checkbox" class="form-check-input" id="keepAspectRatio" checked>
-                                            <label class="form-check-label small">Giữ tỷ lệ</label>
-                                        </div>
-                                        <div>
-                                            <button id="resizeBtn" class="btn btn-primary btn-sm">Drop hình ảnh</button>
-                                            <button id="downloadBtn" class="btn btn-success btn-sm ms-1">Tải xuống</button>
-                                        </div>
-                                    </div>
+                                <div class="upload-text">
+                                    <h3>Kéo thả hình ảnh vào đây</h3>
+                                    <p>hoặc <span class="browse-text">chọn từ thiết bị</span></p>
                                 </div>
+                                <div class="upload-info">
+                                    <span>Chấp nhận: JPG, JPEG, PNG</span>
+                                </div>
+                                <input type="file" id="fileInput" accept=".jpg,.jpeg,.png" class="d-none">
                             </div>
-                            <div class="row">
-                                <div class="col-lg-7">
-                                    <div class="image-wrapper" style="max-width: 100%;">
-                                        <div class="image-container position-relative">
-                                            <img id="imagePreview" class="img-fluid" alt="Preview">
-                                            <!-- <div class="image-overlay"></div> -->
-                                            <div class="crop-area" id="cropArea">
-                                                <div class="crop-border"></div>
-                                                <div class="crop-handles">
-                                                    <div class="handle top-left"></div>
-                                                    <div class="handle top-right"></div>
-                                                    <div class="handle bottom-left"></div>
-                                                    <div class="handle bottom-right"></div>
+                        </div>
+
+                        <div id="previewSection" class="mt-4 d-none">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row mb-3">
+                                        <div class="col-lg-7">
+                                            <h5 class="card-title">Xem trước ảnh</h5>
+                                            <p id="originalSize" class="mb-2"></p>
+                                        </div>
+                                        <div class="col-lg-5">
+                                            <div class="d-flex align-items-center gap-2">
+                                                <div class="form-group flex-grow-1">
+                                                    <label class="small">Rộng (px):</label>
+                                                    <input type="number" id="newWidth" class="form-control form-control-sm">
+                                                </div>
+                                                <div class="form-group flex-grow-1">
+                                                    <label class="small">Cao (px):</label>
+                                                    <input type="number" id="newHeight" class="form-control form-control-sm">
+                                                </div>
+                                            </div>
+                                            <div class="d-flex align-items-center justify-content-between mt-2">
+                                                <div class="form-check">
+                                                    <input type="checkbox" class="form-check-input" id="keepAspectRatio" checked>
+                                                    <label class="form-check-label small">Giữ tỷ lệ</label>
+                                                </div>
+                                                <div>
+                                                    <button id="resizeBtn" class="btn btn-primary btn-sm">Drop hình ảnh</button>
+                                                    <button id="downloadBtn" class="btn btn-success btn-sm ms-1">Tải xuống</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-7">
+                                            <div class="image-wrapper" style="max-width: 100%;">
+                                                <div class="image-container position-relative">
+                                                    <img id="imagePreview" class="img-fluid" alt="Preview">
+                                                    <!-- <div class="image-overlay"></div> -->
+                                                    <div class="crop-area" id="cropArea">
+                                                        <div class="crop-border"></div>
+                                                        <div class="crop-handles">
+                                                            <div class="handle top-left"></div>
+                                                            <div class="handle top-right"></div>
+                                                            <div class="handle bottom-left"></div>
+                                                            <div class="handle bottom-right"></div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -75,7 +97,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </main>
     </div>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
