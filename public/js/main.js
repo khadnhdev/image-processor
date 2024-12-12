@@ -1,4 +1,27 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // Reset trạng thái ban đầu
+    function resetState() {
+        currentFile = null;
+        aspectRatio = 1;
+        originalWidth = 0;
+        originalHeight = 0;
+        
+        // Ẩn phần preview và hiện khung drop
+        previewSection.classList.add('d-none');
+        dropZone.classList.remove('d-none');
+        
+        // Reset các input
+        newWidth.value = '';
+        newHeight.value = '';
+        originalSize.textContent = '';
+        
+        // Ẩn crop area
+        cropArea.classList.remove('active');
+        
+        // Xóa ảnh preview
+        imagePreview.src = '';
+    }
+    
     const dropZone = document.getElementById('dropZone');
     const fileInput = document.getElementById('fileInput');
     const previewSection = document.getElementById('previewSection');
@@ -73,6 +96,7 @@ document.addEventListener('DOMContentLoaded', function() {
             originalSize.textContent = `Kích thước gốc: ${data.originalWidth}x${data.originalHeight}px`;
             originalWidth = data.originalWidth;
             originalHeight = data.originalHeight;
+            dropZone.classList.add('d-none');
             previewSection.classList.remove('d-none');
             showCropArea();
             
@@ -101,8 +125,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Xử lý resize ảnh
     resizeBtn.addEventListener('click', () => {
-        if (!currentFile) return;
-
+        if (!currentFile) {
+            dropZone.classList.remove('d-none');
+            previewSection.classList.add('d-none');
+            resetState();
+            return;
+        }
+        
         // Tính toán tỷ lệ crop
         const cropX = cropArea.offsetLeft / imagePreview.offsetWidth;
         const cropY = cropArea.offsetTop / imagePreview.offsetHeight;
@@ -139,6 +168,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 // Cập nhật preview
                 imagePreview.src = downloadLink.href;
+                // Ẩn crop area sau khi cắt xong
+                cropArea.classList.remove('active');
+                currentFile = null; // Reset trạng thái để có thể drop ảnh mới
+                
                 imagePreview.addEventListener('load', () => {
                     const imageWidth = imagePreview.offsetWidth;
                     const imageHeight = imagePreview.offsetHeight;

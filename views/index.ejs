@@ -26,23 +26,25 @@
                         <div class="card-body">
                             <h5 class="card-title">Xem trước ảnh</h5>
                             <div class="row">
-                                <div class="col-md-6">
-                                    <div class="image-container position-relative">
-                                        <img id="imagePreview" class="img-fluid" alt="Preview">
-                                        <div class="image-overlay"></div>
-                                        <div class="crop-area" id="cropArea">
-                                            <div class="crop-border"></div>
-                                            <div class="crop-handles">
-                                                <div class="handle top-left"></div>
-                                                <div class="handle top-right"></div>
-                                                <div class="handle bottom-left"></div>
-                                                <div class="handle bottom-right"></div>
+                                <div class="col-lg-7">
+                                    <div class="image-wrapper" style="overflow: auto; max-width: 100%;">
+                                        <div class="image-container position-relative">
+                                            <img id="imagePreview" class="img-fluid" alt="Preview">
+                                            <!-- <div class="image-overlay"></div> -->
+                                            <div class="crop-area" id="cropArea">
+                                                <div class="crop-border"></div>
+                                                <div class="crop-handles">
+                                                    <div class="handle top-left"></div>
+                                                    <div class="handle top-right"></div>
+                                                    <div class="handle bottom-left"></div>
+                                                    <div class="handle bottom-right"></div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                     <p id="originalSize"></p>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-lg-5">
                                     <div class="form-group">
                                         <label>Chiều rộng mới (px):</label>
                                         <input type="number" id="newWidth" class="form-control">
@@ -55,7 +57,7 @@
                                         <input type="checkbox" class="form-check-input" id="keepAspectRatio" checked>
                                         <label class="form-check-label">Giữ tỷ lệ ảnh</label>
                                     </div>
-                                    <button id="resizeBtn" class="btn btn-primary mt-3">Thay đổi kích thước</button>
+                                    <button id="resizeBtn" class="btn btn-primary mt-3">Drop hình ảnh</button>
                                     <button id="downloadBtn" class="btn btn-success mt-3 ms-2">Tải xuống ZIP</button>
                                 </div>
                             </div>

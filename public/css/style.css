@@ -30,16 +30,18 @@
 }
 
 #imagePreview {
-    max-width: 100%;
     border-radius: 4px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     display: block;
+    width: auto;
+    height: auto;
 }
 
 .image-container {
     position: relative;
     display: inline-block;
-    max-width: 100%;
+    width: auto;
+    height: auto;
     /* overflow: hidden; */
     margin-bottom: 15px;
     font-size: 0;
@@ -120,5 +122,14 @@
 @media (max-width: 768px) {
     .drop-zone {
         height: 200px;
+    }
+
+    .image-container {
+        overflow-x: auto;
+    }
+
+    #imagePreview {
+        width: auto;
+        height: auto;
     }
 } 
