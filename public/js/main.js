@@ -130,6 +130,20 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(data => {
             if (data.success) {
                 imagePreview.src = `/uploads/${data.resizedImage}?t=${Date.now()}`;
+                imagePreview.addEventListener('load', () => {
+                    const imageWidth = imagePreview.offsetWidth;
+                    const imageHeight = imagePreview.offsetHeight;
+                    
+                    const newLeft = Math.round(cropX * imageWidth);
+                    const newTop = Math.round(cropY * imageHeight);
+                    const newWidth = Math.round(cropWidth * imageWidth);
+                    const newHeight = Math.round(cropHeight * imageHeight);
+                    
+                    cropArea.style.left = Math.min(newLeft, imageWidth - newWidth) + 'px';
+                    cropArea.style.top = Math.min(newTop, imageHeight - newHeight) + 'px';
+                    cropArea.style.width = Math.min(newWidth, imageWidth) + 'px';
+                    cropArea.style.height = Math.min(newHeight, imageHeight) + 'px';
+                }, { once: true });
             }
         })
         .catch(error => {
