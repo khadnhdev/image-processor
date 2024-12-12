@@ -40,10 +40,16 @@
 .image-container {
     position: relative;
     display: inline-block;
-    width: auto;
-    height: auto;
+    width: fit-content;
+    height: fit-content;
     margin-bottom: 15px;
     font-size: 0;
+    flex-shrink: 0;
+    max-width: 100%;
+    max-height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .image-overlay {
@@ -123,13 +129,11 @@
         height: 200px;
     }
 
-    .image-container {
-        overflow-x: auto;
-    }
-
     #imagePreview {
         width: auto;
         height: auto;
+        max-width: 100%;
+        max-height: 100%;
     }
 } 
 
@@ -148,7 +152,7 @@ h1.text-center {
 
 /* Cho phép card chiếm phần còn lại của viewport */
 .card {
-    height: calc(100vh - 100px);
+    height: calc(100vh - 80px);
     display: flex;
     flex-direction: column;
 }
@@ -164,29 +168,32 @@ h1.text-center {
 .row:last-child {
     flex: 1;
     overflow: hidden;
+    height: calc(100vh - 200px);
+    display: flex;
+    justify-content: center;
+}
+
+/* Điều chỉnh cột trong row */
+.row:last-child > div {
+    /* display: flex; */
+    justify-content: center;
 }
 
 .image-wrapper {
     height: 100%;
-    overflow: auto;
+    overflow: visible;
     display: flex;
     align-items: center;
     justify-content: center;
-}
-
-.image-container {
-    position: relative;
-    display: inline-block;
-    width: auto;
-    height: auto;
-    margin-bottom: 15px;
-    font-size: 0;
-    flex-shrink: 0;
+    padding: 10px;
+    background: #f8f9fa;
+    width: 100%;
 }
 
 #imagePreview {
     display: block;
-    margin: auto;
-    max-height: 100%;
-    object-fit: contain;
+    max-width: calc(100vw - 100px);
+    max-height: calc(100vh - 250px);
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
