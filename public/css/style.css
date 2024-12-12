@@ -145,6 +145,8 @@ body {
     display: inline-block;
     width: fit-content;
     height: fit-content;
+    min-width: 50px;
+    min-height: 50px;
     margin-bottom: 15px;
     font-size: 0;
     flex-shrink: 0;
@@ -482,4 +484,46 @@ h1.text-center {
     height: 60%;
     border: 2px dashed var(--primary);
     opacity: 0.5;
+}
+
+.resize-handles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    display: none;
+    border: 2px solid var(--primary);
+    border-radius: 8px;
+}
+
+.resize-handles.active {
+    display: block;
+}
+
+.resize-handles::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(99, 102, 241, 0.1);
+    border-radius: 6px;
+}
+
+.resize-handles .handle {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--primary);
+    border: 2px solid white;
+    box-shadow: 0 2px 4px rgb(0 0 0 / 0.2);
+    pointer-events: auto;
+    cursor: se-resize;
+    z-index: 2;
+}
+
+.resize-handles .handle.bottom-right {
+    bottom: -6px;
+    right: -6px;
 }

@@ -35,9 +35,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 aspectRatio = width / height;
             }
             cropArea.classList.add('active');
+            resizeHandles.classList.remove('active');
             document.querySelector('#resizeBtn').textContent = 'Drop hình ảnh';
         } else {
             cropArea.classList.remove('active');
+            resizeHandles.classList.add('active');
             document.querySelector('#resizeBtn').textContent = 'Thay đổi kích thước';
         }
     };
@@ -87,6 +89,10 @@ document.addEventListener('DOMContentLoaded', function() {
     let startX, startY, startWidth, startHeight;
     let startLeft, startTop;
     let activeHandle = null;
+
+    const resizeHandles = document.getElementById('resizeHandles');
+    let isResizingImage = false;
+    let startImageWidth, startImageHeight;
 
     // Xử lý Drag & Drop
     dropZone.addEventListener('dragover', (e) => {
@@ -453,5 +459,66 @@ document.addEventListener('DOMContentLoaded', function() {
     function handleError(error) {
         console.error('Error:', error);
         alert('Có lỗi xảy ra khi thay đổi kích thước ảnh');
+    }
+
+    // Thêm xử lý resize cho ảnh
+    resizeHandles.querySelector('.handle').addEventListener('mousedown', (e) => {
+        if (currentAction !== 'resize') return;
+        
+        isResizingImage = true;
+        startX = e.clientX;
+        startY = e.clientY;
+        startImageWidth = imagePreview.offsetWidth;
+        startImageHeight = imagePreview.offsetHeight;
+        
+        document.addEventListener('mousemove', handleImageResize);
+        document.addEventListener('mouseup', stopImageResize);
+    });
+
+    function handleImageResize(e) {
+        if (!isResizingImage) return;
+        
+        const dx = e.clientX - startX;
+        const dy = e.clientY - startY;
+        
+        let newImageWidth = startImageWidth + dx;
+        let newImageHeight = startImageHeight + dy;
+        
+        // Giới hạn kích thước tối thiểu
+        newImageWidth = Math.max(50, newImageWidth);
+        newImageHeight = Math.max(50, newImageHeight);
+        
+        if (keepAspectRatio.checked) {
+            const ratio = originalWidth / originalHeight;
+            if (Math.abs(dx) > Math.abs(dy)) {
+                newImageHeight = newImageWidth / ratio;
+            } else {
+                newImageWidth = newImageHeight * ratio;
+            }
+        }
+        
+        imagePreview.style.width = newImageWidth + 'px';
+        imagePreview.style.height = newImageHeight + 'px';
+        
+        // Tính toán tỷ lệ scale mới
+        const scaleX = newImageWidth / startImageWidth;
+        const scaleY = newImageHeight / startImageHeight;
+        
+        // Cập nhật giá trị input width và height
+        const calculatedWidth = Math.round(originalWidth * scaleX);
+        const calculatedHeight = Math.round(originalHeight * scaleY);
+        
+        // Cập nhật giá trị input
+        newWidth.value = calculatedWidth;
+        newHeight.value = calculatedHeight;
+        
+        // Cập nhật kích thước hiển thị
+        originalSize.textContent = `Kích thước mới: ${calculatedWidth}x${calculatedHeight}px`;
+    }
+
+    function stopImageResize() {
+        isResizingImage = false;
+        document.removeEventListener('mousemove', handleImageResize);
+        document.removeEventListener('mouseup', stopImageResize);
     }
 }); 
