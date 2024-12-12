@@ -33,16 +33,27 @@
     max-width: 100%;
     border-radius: 4px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    vertical-align: top;
+    display: block;
 }
 
 .image-container {
     position: relative;
     display: inline-block;
     max-width: 100%;
-    overflow: hidden;
+    /* overflow: hidden; */
     margin-bottom: 15px;
-    height: fit-content;
+    font-size: 0;
+}
+
+.image-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    pointer-events: none;
+    z-index: 1;
 }
 
 .crop-area {
@@ -53,7 +64,7 @@
     height: 200px;
     cursor: move;
     display: none;
-    z-index: 2;
+    z-index: 3;
 }
 
 .crop-area.active {
@@ -69,7 +80,7 @@
     border: 2px solid #fff;
     cursor: move;
     background: transparent;
-    z-index: 1;
+    z-index: 2;
     box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.3);
 }
 
@@ -79,7 +90,7 @@
     height: 10px;
     background-color: #fff;
     border: 1px solid #0d6efd;
-    z-index: 3;
+    z-index: 4;
 }
 
 .handle.top-left {
@@ -110,15 +121,4 @@
     .drop-zone {
         height: 200px;
     }
-} 
-.crop-area::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    margin: -9999px;
-    pointer-events: none;
 } 

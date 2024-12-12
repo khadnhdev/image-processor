@@ -129,7 +129,16 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                imagePreview.src = `/uploads/${data.resizedImage}?t=${Date.now()}`;
+                // Tạo link tải xuống
+                const downloadLink = document.createElement('a');
+                downloadLink.href = `/uploads/${data.resizedImage}?t=${Date.now()}`;
+                downloadLink.download = `resized-${currentFile}`;
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+                document.body.removeChild(downloadLink);
+                
+                // Cập nhật preview
+                imagePreview.src = downloadLink.href;
                 imagePreview.addEventListener('load', () => {
                     const imageWidth = imagePreview.offsetWidth;
                     const imageHeight = imagePreview.offsetHeight;

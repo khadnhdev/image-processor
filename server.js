@@ -37,6 +37,7 @@ const upload = multer({
 
 // Cấu hình middleware
 app.use(express.static('public'));
+app.use(express.json());
 app.set('view engine', 'ejs');
 
 // Routes
@@ -72,16 +73,21 @@ app.post('/resize', async (req, res) => {
         
         // Nếu có thông tin crop, thực hiện crop trước
         if (crop) {
+            // Đảm bảo các giá trị crop là số nguyên dương
+            const cropOptions = {
+                left: Math.max(0, Math.round(crop.x)),
+                top: Math.max(0, Math.round(crop.y)),
+                width: Math.max(1, Math.round(crop.width)),
+                height: Math.max(1, Math.round(crop.height))
+            };
+
             sharpInstance = sharpInstance.extract({
-                left: crop.x,
-                top: crop.y,
-                width: crop.width,
-                height: crop.height
+                ...cropOptions
             });
         }
 
         await sharpInstance
-            .resize(parseInt(width), parseInt(height), {
+            .resize(Math.max(1, parseInt(width)), Math.max(1, parseInt(height)), {
                 fit: 'contain',
                 background: { r: 255, g: 255, b: 255, alpha: 1 }
             })
@@ -89,6 +95,7 @@ app.post('/resize', async (req, res) => {
 
         res.json({ success: true, resizedImage: `resized-${filename}` });
     } catch (error) {
+        console.error('Resize error:', error);
         res.status(500).json({ error: error.message });
     }
 });

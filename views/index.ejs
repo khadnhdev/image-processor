@@ -28,7 +28,8 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="image-container position-relative">
-                                        <img id="imagePreview" class="img-fluid mb-3" alt="Preview">
+                                        <img id="imagePreview" class="img-fluid" alt="Preview">
+                                        <div class="image-overlay"></div>
                                         <div class="crop-area" id="cropArea">
                                             <div class="crop-border"></div>
                                             <div class="crop-handles">
@@ -68,5 +69,13 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
     <script src="/js/main.js"></script>
+    <svg width="0" height="0">
+        <defs>
+            <mask id="crop-mask">
+                <rect width="100%" height="100%" fill="white"/>
+                <rect x="0" y="0" width="100%" height="100%" fill="black"/>
+            </mask>
+        </defs>
+    </svg>
 </body>
 </html> 
