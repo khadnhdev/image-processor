@@ -33,6 +33,7 @@
     max-width: 100%;
     border-radius: 4px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    vertical-align: top;
 }
 
 .image-container {
@@ -41,6 +42,7 @@
     max-width: 100%;
     overflow: hidden;
     margin-bottom: 15px;
+    height: fit-content;
 }
 
 .crop-area {
@@ -68,6 +70,7 @@
     cursor: move;
     background: transparent;
     z-index: 1;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.3);
 }
 
 .crop-handles .handle {
@@ -108,17 +111,6 @@
         height: 200px;
     }
 } 
-.image-container::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    pointer-events: none;
-}
-
 .crop-area::before {
     content: '';
     position: absolute;
@@ -126,7 +118,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: transparent;
+    background: rgba(0, 0, 0, 0.5);
     margin: -9999px;
     pointer-events: none;
 } 
