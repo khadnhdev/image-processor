@@ -181,6 +181,21 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         if (currentAction === 'resize') {
+            // Cập nhật kích thước ảnh preview trước khi gửi request
+            const newWidthValue = parseInt(newWidth.value);
+            const newHeightValue = parseInt(newHeight.value);
+            
+            // Tính toán tỷ lệ scale
+            const scaleX = newWidthValue / originalWidth;
+            const scaleY = newHeightValue / originalHeight;
+            
+            // Cập nhật kích thước ảnh preview
+            const previewWidth = imagePreview.naturalWidth * scaleX;
+            const previewHeight = imagePreview.naturalHeight * scaleY;
+            
+            imagePreview.style.width = `${previewWidth}px`;
+            imagePreview.style.height = `${previewHeight}px`;
+            
             // Chỉ resize không crop
             fetch('/resize', {
                 method: 'POST',
@@ -189,8 +204,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 },
                 body: JSON.stringify({
                     filename: currentFile,
-                    width: newWidth.value,
-                    height: newHeight.value
+                    width: newWidthValue,
+                    height: newHeightValue
                 })
             })
             .then(response => response.json())
@@ -521,4 +536,25 @@ document.addEventListener('DOMContentLoaded', function() {
         document.removeEventListener('mousemove', handleImageResize);
         document.removeEventListener('mouseup', stopImageResize);
     }
+
+    // Thêm xử lý cho input width/height
+    newWidth.addEventListener('input', () => {
+        if (!currentAction === 'resize') return;
+        
+        const newWidthValue = parseInt(newWidth.value);
+        if (keepAspectRatio.checked) {
+            const newHeightValue = Math.round(newWidthValue / aspectRatio);
+            newHeight.value = newHeightValue;
+        }
+    });
+    
+    newHeight.addEventListener('input', () => {
+        if (!currentAction === 'resize') return;
+        
+        const newHeightValue = parseInt(newHeight.value);
+        if (keepAspectRatio.checked) {
+            const newWidthValue = Math.round(newHeightValue * aspectRatio);
+            newWidth.value = newWidthValue;
+        }
+    });
 }); 
