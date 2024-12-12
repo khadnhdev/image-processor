@@ -1,0 +1,132 @@
+.drop-zone {
+    width: 100%;
+    height: 300px;
+    border: 2px dashed #ccc;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.drop-zone:hover {
+    border-color: #0d6efd;
+    background-color: rgba(13, 110, 253, 0.05);
+}
+
+.drop-zone.dragover {
+    border-color: #0d6efd;
+    background-color: rgba(13, 110, 253, 0.1);
+}
+
+.drop-zone-content {
+    color: #666;
+}
+
+.drop-zone-content i {
+    color: #0d6efd;
+}
+
+#imagePreview {
+    max-width: 100%;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.image-container {
+    position: relative;
+    display: inline-block;
+    max-width: 100%;
+    overflow: hidden;
+    margin-bottom: 15px;
+}
+
+.crop-area {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 200px;
+    height: 200px;
+    cursor: move;
+    display: none;
+    z-index: 2;
+}
+
+.crop-area.active {
+    display: block;
+}
+
+.crop-border {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border: 2px solid #fff;
+    cursor: move;
+    background: transparent;
+    z-index: 1;
+}
+
+.crop-handles .handle {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: #fff;
+    border: 1px solid #0d6efd;
+    z-index: 3;
+}
+
+.handle.top-left {
+    top: -5px;
+    left: -5px;
+    cursor: nw-resize;
+}
+
+.handle.top-right {
+    top: -5px;
+    right: -5px;
+    cursor: ne-resize;
+}
+
+.handle.bottom-left {
+    bottom: -5px;
+    left: -5px;
+    cursor: sw-resize;
+}
+
+.handle.bottom-right {
+    bottom: -5px;
+    right: -5px;
+    cursor: se-resize;
+}
+
+@media (max-width: 768px) {
+    .drop-zone {
+        height: 200px;
+    }
+} 
+.image-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    pointer-events: none;
+}
+
+.crop-area::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: transparent;
+    margin: -9999px;
+    pointer-events: none;
+} 

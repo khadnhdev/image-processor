@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ứng dụng Xử lý Ảnh</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="container my-5">
+        <h1 class="text-center mb-4">Ứng dụng Xử lý Ảnh</h1>
+        
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="drop-zone" id="dropZone">
+                    <div class="drop-zone-content">
+                        <i class="fas fa-cloud-upload-alt fa-3x mb-3"></i>
+                        <p>Kéo thả tệp của bạn vào đây hoặc nhấn để chọn file</p>
+                        <input type="file" id="fileInput" accept=".jpg,.jpeg,.png" class="d-none">
+                    </div>
+                </div>
+
+                <div id="previewSection" class="mt-4 d-none">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Xem trước ảnh</h5>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="image-container position-relative">
+                                        <img id="imagePreview" class="img-fluid mb-3" alt="Preview">
+                                        <div class="crop-area" id="cropArea">
+                                            <div class="crop-border"></div>
+                                            <div class="crop-handles">
+                                                <div class="handle top-left"></div>
+                                                <div class="handle top-right"></div>
+                                                <div class="handle bottom-left"></div>
+                                                <div class="handle bottom-right"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p id="originalSize"></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Chiều rộng mới (px):</label>
+                                        <input type="number" id="newWidth" class="form-control">
+                                    </div>
+                                    <div class="form-group mt-2">
+                                        <label>Chiều cao mới (px):</label>
+                                        <input type="number" id="newHeight" class="form-control">
+                                    </div>
+                                    <div class="form-check mt-2">
+                                        <input type="checkbox" class="form-check-input" id="keepAspectRatio" checked>
+                                        <label class="form-check-label">Giữ tỷ lệ ảnh</label>
+                                    </div>
+                                    <button id="resizeBtn" class="btn btn-primary mt-3">Thay đổi kích thước</button>
+                                    <button id="downloadBtn" class="btn btn-success mt-3 ms-2">Tải xuống ZIP</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
+    <script src="/js/main.js"></script>
+</body>
+</html> 
