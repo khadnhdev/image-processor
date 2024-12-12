@@ -222,6 +222,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Đảm bảo khung không vượt ra ngoài ảnh
             cropArea.style.left = Math.max(0, Math.min(newLeft, maxLeft)) + 'px';
             cropArea.style.top = Math.max(0, Math.min(newTop, maxTop)) + 'px';
+            updateCropDimensions();
         } else if (isResizing) {
             const minSize = 50;
             let newWidth, newHeight;
@@ -255,6 +256,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Cập nhật kích thước
             cropArea.style.width = newWidth + 'px';
             cropArea.style.height = newHeight + 'px';
+            updateCropDimensions();
         }
     }
 
@@ -285,5 +287,24 @@ document.addEventListener('DOMContentLoaded', function() {
             cropArea.style.left = left + 'px';
             cropArea.style.top = top + 'px';
         }, { once: true });
+    }
+
+    // Thêm hàm cập nhật kích thước
+    function updateCropDimensions() {
+        // Tính toán kích thước thực tế dựa trên tỷ lệ với ảnh gốc
+        const scaleX = originalWidth / imagePreview.offsetWidth;
+        const scaleY = originalHeight / imagePreview.offsetHeight;
+        
+        const realWidth = Math.round(cropArea.offsetWidth * scaleX);
+        const realHeight = Math.round(cropArea.offsetHeight * scaleY);
+        
+        // Cập nhật giá trị input
+        newWidth.value = realWidth;
+        newHeight.value = realHeight;
+        
+        // Nếu đang giữ tỷ lệ, cập nhật aspectRatio
+        if (keepAspectRatio.checked) {
+            aspectRatio = cropArea.offsetWidth / cropArea.offsetHeight;
+        }
     }
 }); 
