@@ -227,28 +227,47 @@ document.addEventListener('DOMContentLoaded', function() {
             const minSize = 50;
             let newWidth, newHeight;
 
+            // Nếu đang giữ tỷ lệ, tính toán kích thước dựa trên tỷ lệ
+            const calculateDimensions = (width, height) => {
+                if (keepAspectRatio.checked) {
+                    const ratio = startWidth / startHeight;
+                    if (Math.abs(dx) > Math.abs(dy)) {
+                        width = Math.min(Math.max(minSize, width), imageWidth - startLeft);
+                        height = width / ratio;
+                    } else {
+                        height = Math.min(Math.max(minSize, height), imageHeight - startTop);
+                        width = height * ratio;
+                    }
+                }
+                return { width, height };
+            };
+
             if (activeHandle.classList.contains('bottom-right')) {
                 // Góc trái trên cố định
-                newWidth = Math.min(Math.max(minSize, startWidth + dx), imageWidth - startLeft);
-                newHeight = Math.min(Math.max(minSize, startHeight + dy), imageHeight - startTop);
+                const dims = calculateDimensions(startWidth + dx, startHeight + dy);
+                newWidth = dims.width;
+                newHeight = dims.height;
             } else if (activeHandle.classList.contains('bottom-left')) {
                 // Góc phải trên cố định
                 const right = startLeft + startWidth;
-                newWidth = Math.min(Math.max(minSize, startWidth - dx), right);
-                newHeight = Math.min(Math.max(minSize, startHeight + dy), imageHeight - startTop);
+                const dims = calculateDimensions(startWidth - dx, startHeight + dy);
+                newWidth = dims.width;
+                newHeight = dims.height;
                 cropArea.style.left = Math.min(Math.max(0, right - newWidth), right - minSize) + 'px';
             } else if (activeHandle.classList.contains('top-right')) {
                 // Góc trái dưới cố định
                 const bottom = startTop + startHeight;
-                newWidth = Math.min(Math.max(minSize, startWidth + dx), imageWidth - startLeft);
-                newHeight = Math.min(Math.max(minSize, startHeight - dy), bottom);
+                const dims = calculateDimensions(startWidth + dx, startHeight - dy);
+                newWidth = dims.width;
+                newHeight = dims.height;
                 cropArea.style.top = Math.min(Math.max(0, bottom - newHeight), bottom - minSize) + 'px';
             } else if (activeHandle.classList.contains('top-left')) {
                 // Góc phải dưới cố định
                 const right = startLeft + startWidth;
                 const bottom = startTop + startHeight;
-                newWidth = Math.min(Math.max(minSize, startWidth - dx), right);
-                newHeight = Math.min(Math.max(minSize, startHeight - dy), bottom);
+                const dims = calculateDimensions(startWidth - dx, startHeight - dy);
+                newWidth = dims.width;
+                newHeight = dims.height;
                 cropArea.style.left = Math.min(Math.max(0, right - newWidth), right - minSize) + 'px';
                 cropArea.style.top = Math.min(Math.max(0, bottom - newHeight), bottom - minSize) + 'px';
             }
