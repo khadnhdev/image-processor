@@ -31,10 +31,9 @@ A modern web application for resizing and cropping images with an intuitive drag
    npm install
    ```
 
-3. Create an `.env` file with the following content:
+3. Create an `.env` file based on `.env.example`:
    ```
-   PORT=3000
-   UPLOAD_DIR=uploads
+   cp .env.example .env
    ```
 
 4. Create uploads directory:
