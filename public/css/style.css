@@ -347,3 +347,139 @@ h1.text-center {
     flex: 0 0 auto;
     width: 30%;
 }
+
+/* Styles cho modal chọn action */
+.modal-content {
+    border: none;
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.modal-header {
+    border-bottom: 1px solid var(--border-color);
+    padding: 1rem 1.5rem;
+    background: var(--bg-main);
+}
+
+.modal-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.modal-body {
+    padding: 1.5rem;
+    height: 290px;
+}
+
+.action-card {
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.25rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    /* height: 100%; */
+    background: var(--bg-main);
+}
+
+.action-card:hover {
+    border-color: var(--primary);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px -2px rgb(99 102 241 / 0.2);
+    background: var(--bg-card);
+}
+
+.action-icon {
+    width: 56px;
+    height: 56px;
+    background: rgba(99, 102, 241, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+}
+
+.action-icon i {
+    font-size: 1.5rem;
+    color: var(--primary);
+}
+
+.action-card h4 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: var(--text-primary);
+}
+
+.action-card p {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin-bottom: 0;
+}
+
+.example-image {
+    border-radius: 8px;
+    overflow: hidden;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-main);
+    padding: 0.75rem;
+}
+
+.demo-box {
+    width: 160px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.resize-demo {
+    width: 100%;
+    height: 100%;
+    background: var(--bg-card);
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    position: relative;
+}
+
+.resize-arrows {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+.resize-arrows i {
+    font-size: 1.25rem;
+    color: var(--text-secondary);
+    opacity: 0.5;
+}
+
+.crop-demo {
+    width: 100%;
+    height: 100%;
+    background: var(--bg-card);
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    position: relative;
+}
+
+.crop-demo::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60%;
+    height: 60%;
+    border: 2px dashed var(--primary);
+    opacity: 0.5;
+}

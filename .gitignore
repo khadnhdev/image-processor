@@ -22,6 +22,7 @@ pids
 # Directory for uploaded files
 public/uploads/*
 !public/uploads/.gitkeep
+!public/images/
 
 # IDE / Editor directories
 .idea/

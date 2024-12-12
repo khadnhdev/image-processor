@@ -1,4 +1,47 @@
+// Khai báo biến toàn cục
+let currentAction = null;
+let actionModal = null;
+let dropZone, previewSection, cropArea;
+let currentFile = null;
+
 document.addEventListener('DOMContentLoaded', function() {
+    // Khởi tạo modal khi DOM đã load
+    actionModal = new bootstrap.Modal(document.getElementById('actionModal'));
+    
+    // Hàm xử lý lựa chọn action
+    window.selectAction = function(action) {
+        currentAction = action;
+        actionModal.hide();
+        
+        dropZone.classList.add('d-none');
+        previewSection.classList.remove('d-none');
+        
+        if (action === 'crop') {
+            const scaleX = imagePreview.offsetWidth / originalWidth;
+            const scaleY = imagePreview.offsetHeight / originalHeight;
+            
+            const width = Math.round(parseInt(newWidth.value) * scaleX);
+            const height = Math.round(parseInt(newHeight.value) * scaleY);
+            
+            const left = Math.round((imagePreview.offsetWidth - width) / 2);
+            const top = Math.round((imagePreview.offsetHeight - height) / 2);
+            
+            cropArea.style.width = width + 'px';
+            cropArea.style.height = height + 'px';
+            cropArea.style.left = left + 'px';
+            cropArea.style.top = top + 'px';
+            
+            if (keepAspectRatio.checked) {
+                aspectRatio = width / height;
+            }
+            cropArea.classList.add('active');
+            document.querySelector('#resizeBtn').textContent = 'Drop hình ảnh';
+        } else {
+            cropArea.classList.remove('active');
+            document.querySelector('#resizeBtn').textContent = 'Thay đổi kích thước';
+        }
+    };
+    
     // Reset trạng thái ban đầu
     function resetState() {
         currentFile = null;
@@ -22,9 +65,9 @@ document.addEventListener('DOMContentLoaded', function() {
         imagePreview.src = '';
     }
     
-    const dropZone = document.getElementById('dropZone');
+    dropZone = document.getElementById('dropZone');
     const fileInput = document.getElementById('fileInput');
-    const previewSection = document.getElementById('previewSection');
+    previewSection = document.getElementById('previewSection');
     const imagePreview = document.getElementById('imagePreview');
     const originalSize = document.getElementById('originalSize');
     const newWidth = document.getElementById('newWidth');
@@ -33,13 +76,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const resizeBtn = document.getElementById('resizeBtn');
     const downloadBtn = document.getElementById('downloadBtn');
 
-    let currentFile = null;
     let aspectRatio = 1;
     let originalWidth = 0;
     let originalHeight = 0;
     
     // Thêm biến cho crop area
-    const cropArea = document.getElementById('cropArea');
+    cropArea = document.getElementById('cropArea');
     let isResizing = false;
     let isDragging = false;
     let startX, startY, startWidth, startHeight;
@@ -96,9 +138,9 @@ document.addEventListener('DOMContentLoaded', function() {
             originalSize.textContent = `Kích thước gốc: ${data.originalWidth}x${data.originalHeight}px`;
             originalWidth = data.originalWidth;
             originalHeight = data.originalHeight;
-            dropZone.classList.add('d-none');
-            previewSection.classList.remove('d-none');
-            showCropArea();
+            
+            // Hiển thị modal để chọn action
+            actionModal.show();
             
             newWidth.value = data.originalWidth;
             newHeight.value = data.originalHeight;
@@ -132,66 +174,84 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         
-        // Tính toán tỷ lệ crop
-        const cropX = cropArea.offsetLeft / imagePreview.offsetWidth;
-        const cropY = cropArea.offsetTop / imagePreview.offsetHeight;
-        const cropWidth = cropArea.offsetWidth / imagePreview.offsetWidth;
-        const cropHeight = cropArea.offsetHeight / imagePreview.offsetHeight;
+        if (currentAction === 'resize') {
+            // Chỉ resize không crop
+            fetch('/resize', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    filename: currentFile,
+                    width: newWidth.value,
+                    height: newHeight.value
+                })
+            })
+            .then(response => response.json())
+            .then(handleResizeResponse)
+            .catch(handleError);
+        } else {
+            // Tính toán tỷ lệ crop
+            const cropX = cropArea.offsetLeft / imagePreview.offsetWidth;
+            const cropY = cropArea.offsetTop / imagePreview.offsetHeight;
+            const cropWidth = cropArea.offsetWidth / imagePreview.offsetWidth;
+            const cropHeight = cropArea.offsetHeight / imagePreview.offsetHeight;
 
-        fetch('/resize', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                filename: currentFile,
-                width: newWidth.value,
-                height: newHeight.value,
-                crop: {
-                    x: Math.round(cropX * originalWidth),
-                    y: Math.round(cropY * originalHeight),
-                    width: Math.round(cropWidth * originalWidth),
-                    height: Math.round(cropHeight * originalHeight)
+            fetch('/resize', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    filename: currentFile,
+                    width: newWidth.value,
+                    height: newHeight.value,
+                    crop: {
+                        x: Math.round(cropX * originalWidth),
+                        y: Math.round(cropY * originalHeight),
+                        width: Math.round(cropWidth * originalWidth),
+                        height: Math.round(cropHeight * originalHeight)
+                    }
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Tạo link tải xuống
+                    const downloadLink = document.createElement('a');
+                    downloadLink.href = `/uploads/${data.resizedImage}?t=${Date.now()}`;
+                    downloadLink.download = `resized-${currentFile}`;
+                    document.body.appendChild(downloadLink);
+                    downloadLink.click();
+                    document.body.removeChild(downloadLink);
+                    
+                    // Cập nhật preview
+                    imagePreview.src = downloadLink.href;
+                    // Ẩn crop area sau khi cắt xong
+                    cropArea.classList.remove('active');
+                    currentFile = null; // Reset trạng thái để có thể drop ảnh mới
+                    
+                    imagePreview.addEventListener('load', () => {
+                        const imageWidth = imagePreview.offsetWidth;
+                        const imageHeight = imagePreview.offsetHeight;
+                        
+                        const newLeft = Math.round(cropX * imageWidth);
+                        const newTop = Math.round(cropY * imageHeight);
+                        const newWidth = Math.round(cropWidth * imageWidth);
+                        const newHeight = Math.round(cropHeight * imageHeight);
+                        
+                        cropArea.style.left = Math.min(newLeft, imageWidth - newWidth) + 'px';
+                        cropArea.style.top = Math.min(newTop, imageHeight - newHeight) + 'px';
+                        cropArea.style.width = Math.min(newWidth, imageWidth) + 'px';
+                        cropArea.style.height = Math.min(newHeight, imageHeight) + 'px';
+                    }, { once: true });
                 }
             })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                // Tạo link tải xuống
-                const downloadLink = document.createElement('a');
-                downloadLink.href = `/uploads/${data.resizedImage}?t=${Date.now()}`;
-                downloadLink.download = `resized-${currentFile}`;
-                document.body.appendChild(downloadLink);
-                downloadLink.click();
-                document.body.removeChild(downloadLink);
-                
-                // Cập nhật preview
-                imagePreview.src = downloadLink.href;
-                // Ẩn crop area sau khi cắt xong
-                cropArea.classList.remove('active');
-                currentFile = null; // Reset trạng thái để có thể drop ảnh mới
-                
-                imagePreview.addEventListener('load', () => {
-                    const imageWidth = imagePreview.offsetWidth;
-                    const imageHeight = imagePreview.offsetHeight;
-                    
-                    const newLeft = Math.round(cropX * imageWidth);
-                    const newTop = Math.round(cropY * imageHeight);
-                    const newWidth = Math.round(cropWidth * imageWidth);
-                    const newHeight = Math.round(cropHeight * imageHeight);
-                    
-                    cropArea.style.left = Math.min(newLeft, imageWidth - newWidth) + 'px';
-                    cropArea.style.top = Math.min(newTop, imageHeight - newHeight) + 'px';
-                    cropArea.style.width = Math.min(newWidth, imageWidth) + 'px';
-                    cropArea.style.height = Math.min(newHeight, imageHeight) + 'px';
-                }, { once: true });
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Có lỗi xảy ra khi thay đổi kích thước ảnh');
-        });
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Có lỗi xảy ra khi thay đổi kích thước ảnh');
+            });
+        }
     });
 
     // Xử lý tải xuống ZIP
@@ -262,8 +322,11 @@ document.addEventListener('DOMContentLoaded', function() {
             const maxTop = imageHeight - cropArea.offsetHeight;
             
             // Đảm bảo khung không vượt ra ngoài ảnh
-            cropArea.style.left = Math.max(0, Math.min(newLeft, maxLeft)) + 'px';
-            cropArea.style.top = Math.max(0, Math.min(newTop, maxTop)) + 'px';
+            const boundedLeft = Math.max(0, Math.min(newLeft, maxLeft));
+            const boundedTop = Math.max(0, Math.min(newTop, maxTop));
+            
+            cropArea.style.left = boundedLeft + 'px';
+            cropArea.style.top = boundedTop + 'px';
             updateCropDimensions();
         } else if (isResizing) {
             const minSize = 50;
@@ -274,13 +337,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (keepAspectRatio.checked) {
                     const ratio = startWidth / startHeight;
                     if (Math.abs(dx) > Math.abs(dy)) {
-                        width = Math.min(Math.max(minSize, width), imageWidth - startLeft);
+                        width = Math.min(Math.max(minSize, width), imageWidth - cropArea.offsetLeft);
                         height = width / ratio;
                     } else {
-                        height = Math.min(Math.max(minSize, height), imageHeight - startTop);
+                        height = Math.min(Math.max(minSize, height), imageHeight - cropArea.offsetTop);
                         width = height * ratio;
                     }
                 }
+                // Đảm bảo kích thước không vượt quá giới hạn ảnh
+                width = Math.min(width, imageWidth - cropArea.offsetLeft);
+                height = Math.min(height, imageHeight - cropArea.offsetTop);
                 return { width, height };
             };
 
@@ -295,14 +361,24 @@ document.addEventListener('DOMContentLoaded', function() {
                 const dims = calculateDimensions(startWidth - dx, startHeight + dy);
                 newWidth = dims.width;
                 newHeight = dims.height;
-                cropArea.style.left = Math.min(Math.max(0, right - newWidth), right - minSize) + 'px';
+                const newLeft = Math.min(Math.max(0, right - newWidth), right - minSize);
+                cropArea.style.left = newLeft + 'px';
+                // Điều chỉnh lại width nếu left thay đổi
+                if (newLeft === 0) {
+                    newWidth = right;
+                }
             } else if (activeHandle.classList.contains('top-right')) {
                 // Góc trái dưới cố định
                 const bottom = startTop + startHeight;
                 const dims = calculateDimensions(startWidth + dx, startHeight - dy);
                 newWidth = dims.width;
                 newHeight = dims.height;
-                cropArea.style.top = Math.min(Math.max(0, bottom - newHeight), bottom - minSize) + 'px';
+                const newTop = Math.min(Math.max(0, bottom - newHeight), bottom - minSize);
+                cropArea.style.top = newTop + 'px';
+                // Điều chỉnh lại height nếu top thay đổi
+                if (newTop === 0) {
+                    newHeight = bottom;
+                }
             } else if (activeHandle.classList.contains('top-left')) {
                 // Góc phải dưới cố định
                 const right = startLeft + startWidth;
@@ -310,8 +386,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 const dims = calculateDimensions(startWidth - dx, startHeight - dy);
                 newWidth = dims.width;
                 newHeight = dims.height;
-                cropArea.style.left = Math.min(Math.max(0, right - newWidth), right - minSize) + 'px';
-                cropArea.style.top = Math.min(Math.max(0, bottom - newHeight), bottom - minSize) + 'px';
+                const newLeft = Math.min(Math.max(0, right - newWidth), right - minSize);
+                const newTop = Math.min(Math.max(0, bottom - newHeight), bottom - minSize);
+                cropArea.style.left = newLeft + 'px';
+                cropArea.style.top = newTop + 'px';
+                // Điều chỉnh lại kích thước nếu cần
+                if (newLeft === 0) newWidth = right;
+                if (newTop === 0) newHeight = bottom;
             }
 
             // Cập nhật kích thước
@@ -327,35 +408,6 @@ document.addEventListener('DOMContentLoaded', function() {
         activeHandle = null;
         document.removeEventListener('mousemove', handleCrop);
         document.removeEventListener('mouseup', stopCrop);
-    }
-
-    // Hiển thị crop area khi ảnh được tải
-    function showCropArea() {
-        cropArea.classList.add('active');
-        
-        // Đợi ảnh load xong để lấy kích thước chính xác
-        imagePreview.addEventListener('load', () => {
-            // Tính toán kích thước dựa trên giá trị input
-            const scaleX = imagePreview.offsetWidth / originalWidth;
-            const scaleY = imagePreview.offsetHeight / originalHeight;
-            
-            const width = Math.round(parseInt(newWidth.value) * scaleX);
-            const height = Math.round(parseInt(newHeight.value) * scaleY);
-            
-            // Tính toán vị trí giữa ảnh
-            const left = Math.round((imagePreview.offsetWidth - width) / 2);
-            const top = Math.round((imagePreview.offsetHeight - height) / 2);
-            
-            cropArea.style.width = width + 'px';
-            cropArea.style.height = height + 'px';
-            cropArea.style.left = left + 'px';
-            cropArea.style.top = top + 'px';
-            
-            // Cập nhật tỷ lệ khung nếu cần
-            if (keepAspectRatio.checked) {
-                aspectRatio = width / height;
-            }
-        }, { once: true });
     }
 
     // Thêm hàm cập nhật kích thước
@@ -375,5 +427,31 @@ document.addEventListener('DOMContentLoaded', function() {
         if (keepAspectRatio.checked) {
             aspectRatio = cropArea.offsetWidth / cropArea.offsetHeight;
         }
+    }
+
+    // Hàm xử lý phản hồi khi resize thành công
+    function handleResizeResponse(data) {
+        if (data.success) {
+            // Tạo link tải xuống
+            const downloadLink = document.createElement('a');
+            downloadLink.href = `/uploads/${data.resizedImage}?t=${Date.now()}`;
+            downloadLink.download = `resized-${currentFile}`;
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+            
+            // Cập nhật preview
+            imagePreview.src = downloadLink.href;
+            
+            // Reset trạng thái
+            cropArea.classList.remove('active');
+            currentFile = null;
+        }
+    }
+
+    // Hàm xử lý lỗi
+    function handleError(error) {
+        console.error('Error:', error);
+        alert('Có lỗi xảy ra khi thay đổi kích thước ảnh');
     }
 }); 
