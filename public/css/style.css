@@ -42,7 +42,6 @@
     display: inline-block;
     width: auto;
     height: auto;
-    /* overflow: hidden; */
     margin-bottom: 15px;
     font-size: 0;
 }
@@ -133,3 +132,61 @@
         height: auto;
     }
 } 
+
+/* Tính toán chiều cao cho container chính */
+.container-fluid {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Giới hạn chiều cao của tiêu đề */
+h1.text-center {
+    margin: 0.5rem 0;
+    font-size: 1.75rem;
+}
+
+/* Cho phép card chiếm phần còn lại của viewport */
+.card {
+    height: calc(100vh - 100px);
+    display: flex;
+    flex-direction: column;
+}
+
+.card-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* Đảm bảo phần preview ảnh chiếm hết không gian còn lại */
+.row:last-child {
+    flex: 1;
+    overflow: hidden;
+}
+
+.image-wrapper {
+    height: 100%;
+    overflow: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.image-container {
+    position: relative;
+    display: inline-block;
+    width: auto;
+    height: auto;
+    margin-bottom: 15px;
+    font-size: 0;
+    flex-shrink: 0;
+}
+
+#imagePreview {
+    display: block;
+    margin: auto;
+    max-height: 100%;
+    object-fit: contain;
+}
