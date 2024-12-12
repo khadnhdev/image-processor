@@ -36,11 +36,11 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             cropArea.classList.add('active');
             resizeHandles.classList.remove('active');
-            document.querySelector('#resizeBtn').textContent = 'Drop hình ảnh';
+            document.querySelector('#resizeBtn').textContent = 'Apply';
         } else {
             cropArea.classList.remove('active');
             resizeHandles.classList.add('active');
-            document.querySelector('#resizeBtn').textContent = 'Thay đổi kích thước';
+            document.querySelector('#resizeBtn').textContent = 'Apply';
         }
     };
     
@@ -120,13 +120,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function handleFiles(files) {
         if (files.length > 1) {
-            alert('Vui lòng tải lên từng ảnh một.');
+            alert('Please upload one image at a time.');
             return;
         }
 
         const file = files[0];
         if (!file.type.match('image.*')) {
-            alert('Vui lòng chọn file ảnh (jpg, jpeg, png)');
+            alert('Please select an image file (jpg, jpeg, png)');
             return;
         }
 
@@ -141,7 +141,7 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(data => {
             currentFile = data.filename;
             imagePreview.src = `/uploads/${data.filename}`;
-            originalSize.textContent = `Kích thước gốc: ${data.originalWidth}x${data.originalHeight}px`;
+            originalSize.textContent = `Original size: ${data.originalWidth}x${data.originalHeight}px`;
             originalWidth = data.originalWidth;
             originalHeight = data.originalHeight;
             
@@ -154,7 +154,7 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .catch(error => {
             console.error('Error:', error);
-            alert('Có lỗi xảy ra khi tải ảnh lên');
+            alert('An error occurred while uploading the image');
         });
     }
 
@@ -270,7 +270,7 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .catch(error => {
                 console.error('Error:', error);
-                alert('Có lỗi xảy ra khi thay đổi kích thước ảnh');
+                alert('An error occurred while resizing the image');
             });
         }
     });
@@ -473,7 +473,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Hàm xử lý lỗi
     function handleError(error) {
         console.error('Error:', error);
-        alert('Có lỗi xảy ra khi thay đổi kích thước ảnh');
+        alert('An error occurred while processing the image');
     }
 
     // Thêm xử lý resize cho ảnh
@@ -528,7 +528,7 @@ document.addEventListener('DOMContentLoaded', function() {
         newHeight.value = calculatedHeight;
         
         // Cập nhật kích thước hiển thị
-        originalSize.textContent = `Kích thước mới: ${calculatedWidth}x${calculatedHeight}px`;
+        originalSize.textContent = `New size: ${calculatedWidth}x${calculatedHeight}px`;
     }
 
     function stopImageResize() {

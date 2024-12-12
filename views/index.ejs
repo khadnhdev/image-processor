@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,7 +14,7 @@
         <nav class="app-header">
             <div class="logo">
                 <i class="fas fa-crop-alt"></i>
-                <span>ImageCraft</span>
+                <span>ImageCraft Tool</span>
             </div>
         </nav>
         <main class="app-main">
@@ -25,11 +25,11 @@
                             <i class="fas fa-cloud-upload-alt"></i>
                         </div>
                         <div class="upload-text">
-                            <h3>Kéo thả hình ảnh vào đây</h3>
-                            <p>hoặc <span class="browse-text">chọn từ thiết bị</span></p>
+                            <h3>Drag & drop image here</h3>
+                            <p>or <span class="browse-text">browse from device</span></p>
                         </div>
                         <div class="upload-info">
-                            <span>Chấp nhận: JPG, JPEG, PNG</span>
+                            <span>Accepts: JPG, JPEG, PNG</span>
                         </div>
                         <input type="file" id="fileInput" accept=".jpg,.jpeg,.png" class="d-none">
                     </div>
@@ -40,7 +40,7 @@
                         <div class="card-body">
                             <div class="row mb-3">
                                 <div class="col-lg-4">
-                                    <h5 class="card-title">Xem trước ảnh</h5>
+                                    <h5 class="card-title">Image Preview</h5>
                                     <p id="originalSize" class="mb-2"></p>
                                 </div>
                                 <div class="col-lg-5 d-flex align-items-center">
@@ -50,14 +50,14 @@
                                                 <span class="input-group-text">
                                                     <i class="fas fa-arrows-alt-h"></i>
                                                 </span>
-                                                <input type="number" id="newWidth" class="form-control" placeholder="Chiều rộng">
+                                                <input type="number" id="newWidth" class="form-control" placeholder="Width">
                                                 <span class="input-group-text">px</span>
                                             </div>
                                             <div class="input-group">
                                                 <span class="input-group-text">
                                                     <i class="fas fa-arrows-alt-v"></i>
                                                 </span>
-                                                <input type="number" id="newHeight" class="form-control" placeholder="Chiều cao">
+                                                <input type="number" id="newHeight" class="form-control" placeholder="Height">
                                                 <span class="input-group-text">px</span>
                                             </div>
                                             <label class="aspect-ratio-toggle">
@@ -127,7 +127,7 @@
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Bạn muốn làm gì với ảnh này?</h5>
+                    <h5 class="modal-title">What would you like to do with this image?</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -137,7 +137,7 @@
                                 <div class="action-icon">
                                     <i class="fas fa-expand-arrows-alt"></i>
                                 </div>
-                                <h4>Thu phóng ảnh</h4>
+                                <h4>Resize Image</h4>
                                 <div class="example-image">
                                     <div class="demo-box">
                                         <div class="resize-demo"></div>
@@ -153,7 +153,7 @@
                                 <div class="action-icon">
                                     <i class="fas fa-crop-alt"></i>
                                 </div>
-                                <h4>Cắt vùng chọn</h4>
+                                <h4>Crop Image</h4>
                                 <div class="example-image">
                                     <div class="demo-box">
                                         <div class="crop-demo"></div>
