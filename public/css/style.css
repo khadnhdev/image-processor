@@ -135,23 +135,17 @@ body {
 }
 
 #imagePreview {
+    max-width: 100%;
     max-height: 100%;
+    object-fit: contain;
     border-radius: 8px;
     box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
 }
 
 .image-container {
     position: relative;
-    display: inline-block;
     width: fit-content;
     height: fit-content;
-    min-width: 50px;
-    min-height: 50px;
-    margin-bottom: 15px;
-    font-size: 0;
-    flex-shrink: 0;
-    max-width: 100%;
-    max-height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -282,19 +276,23 @@ h1.text-center {
     justify-content: center;
 }
 
-/* Điều chỉnh cột trong row */
-.row:last-child > div {
-    /* display: flex; */
-    justify-content: center;
+/* Điều chỉnh cột chứa ảnh */
+.row:last-child > .col-lg-7 {
+    width: 70%;
+    margin: 0 auto;
 }
 
 .image-wrapper {
     background: var(--bg-main);
     border-radius: 8px;
     padding: 1.5rem;
-    height: calc(100vh - 250px);
+    height: calc(100vh - 300px);
     min-height: 400px;
     width: 100%;
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
 }
 
 .card-title {
