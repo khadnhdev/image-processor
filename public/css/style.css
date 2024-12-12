@@ -387,7 +387,7 @@ h1.text-center {
 
 .action-card:hover {
     border-color: var(--primary);
-    transform: translateY(-2px);
+    /* transform: translateY(-2px); */
     box-shadow: 0 8px 16px -2px rgb(99 102 241 / 0.2);
     background: var(--bg-card);
 }
